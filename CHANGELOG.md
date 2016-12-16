@@ -8,7 +8,7 @@ provide an object literal in the validate setting with the properties `language`
 "eslint.validate": [ "javascript", "javascriptreact", { "language": "html", "autoFix": true } ]
 ```
 
-### <a name="RN121"></a>1.2.1
+### 1.2.1
 
 - Added support to validate file types other than JavaScript. To enable this, you need to do the following:
   - Configure ESLint with an additional plugin to do the actual validation. For example, to validate HTML files install
