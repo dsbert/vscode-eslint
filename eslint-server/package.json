@@ -1,6 +1,6 @@
 {
 	"name": "eslint-server",
-	"version": "0.10.0",
+	"version": "1.2.1",
 	"author": "Microsoft Corporation",
 	"license": "MIT",
 	"repository": {
@@ -14,11 +14,12 @@
 		"node": "*"
 	},
 	"dependencies": {
-		"vscode-languageserver": "^2.5.0",
-		"vscode-uri": "^0.0.7"
+		"vscode-uri": "^1.0.0",
+		"vscode-languageserver": "^3.0.1-alpha.13"
 	},
 	"devDependencies": {
-		"typescript": "^1.8.10"
+		"typescript": "^2.0.10",
+		"@types/node": "^6.0.45"
 	},
 	"scripts": {
 		"compile": "installServerIntoExtension ../eslint ./package.json ./src/tsconfig.json && tsc -p ./src",

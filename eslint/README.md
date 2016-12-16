@@ -14,10 +14,17 @@ command `Create '.eslintrc.json' file`.
 
 This extension contributes the following variables to the [settings](https://code.visualstudio.com/docs/customization/userandworkspace):
 
-- `eslint.enable`: enable/diable eslint. Is enabled by default.
+- `eslint.enable`: enable/disable eslint. Is enabled by default.
 - `eslint.options`: options to configure how eslint is started using the [ESLint CLI Engine API](http://eslint.org/docs/developer-guide/nodejs-api#cliengin). Defaults to an empty option bag.
+  An example to point to a custom `.eslintrc.json` file is:
+```json
+{
+	"eslint.options": { "configFile": "C:/mydirectory/.eslintrc.json" }
+}
+```
 - `eslint.run` - run the linter `onSave` or `onType`, default is `onType`.
 - `eslint.nodePath` - use this setting if an installed ESLint package can't be detected, for example `/myGlobalNodePackages/node_modules`.
+- `eslint.validate` - an array of language identifiers specify the files to be validated. See [1.2.1 Release notes](#RN120) for details.
 
 ## Commands:
 
@@ -25,8 +32,49 @@ This extension contributes the following commands to the Command palette.
 
 - `Create '.eslintrc.json' file`: creates a new `.eslintrc.json` file.
 - `Fix all auto-fixable problems`: applies ESLint auto-fix resolutions to all fixable problems.
+- `Disable ESLint for this Workspace`: disables ESLint extension for this workspace.
+- `Enable ESLint for this Workspace`: enable ESLint extension for this workspace.
 
 ## Release Notes:
+
+### 1.2.2
+
+- Added configuration options to enable code actions and auto fix on save selectively per language. In release 1.2.1 code actions and auto fix on save very still only
+available for JavaScript. In 1.2.2 you can now enable this selectively per language. For compatibility it is enabled by default for JavaScript and disabled by default for all
+other languages. The reason is that I encounter cases for non JavaScript file types where the computed fixes had wrong positions resulting in 'broken' documents. To enable it simply
+provide an object literal in the validate setting with the properties `language` and `autoFix` instead of a simple `string`. An example is:
+```json
+"eslint.validate": [ "javascript", "javascriptreact", { "language": "html", "autoFix": true } ]
+```
+
+### <a name="RN121"></a>1.2.1
+
+- Added support to validate file types other than JavaScript. To enable this, you need to do the following:
+  - Configure ESLint with an additional plugin to do the actual validation. For example, to validate HTML files install
+`eslint-plugin-html` using `npm install eslint-plugin-html --save-dev` and update the eslint configuration (e.g. .eslintrc.json file)
+with `"plugin": [ "html" ]`.
+  - Add the corresponding language identifier to the `eslint.validate` setting. Something like `"eslint.validate": [ "javascript", "javascriptreact", "html" ]`.
+If the setting is missing, it defaults to `["javascript", "javascriptreact"]`
+
+Please note that code actions and auto fix on save is still only available for JavaScript. The reason is that I detected position problems with fixes contributed by plugins
+resulting in broken source code when applied.
+
+### 1.1.0
+
+- Supports more than one ESLint module installation in a workspace. This eases working with typical client / server setups where ESLint is installed
+in a `node_modules` folder in the `server` and the `client` directory.
+- Improved error handling if a plugin can't be loaded.
+- Added commands to enable and disable ESLint.
+
+### 1.0.8
+
+- Supports auto fix on save. Needs to be enabled via `"eslint.autoFixOnSave": true`. Please note that auto fix on save will only happen
+if the save happened manually or via focus lost. This is consistent with VS Code's format on save behaviour. Auto fix on save requires
+VS Code version 1.6 or newer.
+
+### 1.0.7
+
+- Fixed problem with validating package.json when editing .eslintrc.* files.
 
 ### 1.0.5
 

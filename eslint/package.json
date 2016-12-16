@@ -2,7 +2,7 @@
   "name": "vscode-eslint",
   "displayName": "ESLint",
   "description": "Integrates ESLint into VS Code.",
-  "version": "1.0.5",
+  "version": "1.2.2",
   "author": "Microsoft Corporation",
   "license": "MIT",
   "repository": {
@@ -18,19 +18,16 @@
     "Linters"
   ],
   "engines": {
-    "vscode": "^1.0.0"
+    "vscode": "^1.6.0"
   },
   "activationEvents": [
-    "onLanguage:javascript",
-    "onLanguage:javascriptreact",
-    "onCommand:eslint.executeAutofix",
-    "onCommand:eslint.createConfig"
+    "*"
   ],
   "main": "./out/extension",
   "contributes": {
     "configuration": {
       "type": "object",
-      "title": "ESLint configuration",
+      "title": "ESLint",
       "properties": {
         "eslint.enable": {
           "type": "boolean",
@@ -38,7 +35,7 @@
           "description": "Controls whether eslint is enabled for JavaScript files or not."
         },
         "eslint.nodePath": {
-          "type": "string",
+          "type": ["string", "null"],
           "default": null,
           "description": "A path added to NODE_PATH when resolving the eslint module."
         },
@@ -50,7 +47,7 @@
         "eslint.options": {
           "type": "object",
           "default": {},
-          "description": "The eslint options object to provide args to the eslint command."
+          "description": "The eslint options object to provide args normally passed to eslint when executed from a command line."
         },
         "eslint.trace.server": {
           "type": "string",
@@ -70,19 +67,64 @@
           ],
           "default": "onType",
           "description": "Run the linter on save (onSave) or on type (onType)"
+        },
+        "eslint.autoFixOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Turns auto fix on save on or off."
+        },
+        "eslint.validate": {
+          "type": "array",
+          "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "language": {
+                      "type": "string",
+                      "description": "The language id to be validated by ESLint"
+                    },
+                    "autoFix": {
+                      "type": "boolean",
+                      "description": "Whether auto fixes are provided for the language"
+                    }
+                  }
+                }
+              ]
+          },
+          "default": ["javascript", "javascriptreact"],
+          "description": "An array of language ids which should be validated by ESLint"
         }
       }
     },
     "commands": [
       {
-        "title": "Fix all auto-fixable problems",
+        "title": "Fix all auto-fixable Problems",
         "category": "ESLint",
         "command": "eslint.executeAutofix"
       },
       {
-        "title": "Create '.eslintrc.json' file",
+        "title": "Create '.eslintrc.json' File",
         "category": "ESLint",
         "command": "eslint.createConfig"
+      },
+      {
+        "title": "Enable ESLint for this Workspace",
+        "category": "ESLint",
+        "command": "eslint.enable"
+      },
+      {
+        "title": "Disable ESLint for this Workspace",
+        "category": "ESLint",
+        "command": "eslint.disable"
+      },
+      {
+        "title": "Show Output Channel",
+        "category": "ESLint",
+        "command": "eslint.showOutputChannel"
       }
     ],
     "jsonValidation": [
@@ -104,10 +146,11 @@
     "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "devDependencies": {
-    "vscode": "^0.11.10",
-    "typescript": "^1.8.10"
+    "typescript": "^2.0.10",
+    "vscode": "^1.0.0",
+    "@types/node": "^6.0.40"
   },
   "dependencies": {
-    "vscode-languageclient": "^2.5.0"
+    "vscode-languageclient": "^3.0.1-alpha.13"
   }
 }
